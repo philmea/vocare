@@ -14,16 +14,16 @@ function save(key, value) {
 }
 
 let config = null;
-let settings = load("rr.settings", { provider: null, voice: null, speed: 1.0 });
-let library = load("rr.library", {});   // fid -> {id,title,author,cover,chapters,progress,addedAt,lastPlayed}
+let settings = load("vocare.settings", { provider: null, voice: null, speed: 1.0 });
+let library = load("vocare.library", {});   // fid -> {id,title,author,cover,chapters,progress,addedAt,lastPlayed}
 let current = null;                     // {fid, idx, part, total, provider, voice}
 let pendingSeek = 0;
 let statusTimer = null;
 let sleep = { mode: 0, until: 0 };
 let viewFid = null;
 
-const saveLibrary = () => save("rr.library", library);
-const saveSettings = () => save("rr.settings", settings);
+const saveLibrary = () => save("vocare.library", library);
+const saveSettings = () => save("vocare.settings", settings);
 
 // ------------------------------------------------------------ api
 async function api(path, opts = {}) {

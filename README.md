@@ -1,4 +1,4 @@
-# RR Audio
+# Vocare
 
 Paste a Royal Road fiction link and listen to it as an audiobook on your phone.
 
@@ -41,8 +41,8 @@ Open `http://<computer-ip>:8000` on your phone (same Wi-Fi).
 Or with Docker:
 
 ```bash
-docker build -t rr-audio .
-docker run -d --name rr-audio -p 8000:8000 --env-file .env -v rr-audio-data:/data rr-audio
+docker build -t vocare .
+docker run -d --name vocare -p 8000:8000 --env-file .env -v vocare-data:/data vocare
 ```
 
 ### Listening away from home

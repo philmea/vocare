@@ -1,4 +1,4 @@
-"""RR Audio: turn Royal Road chapters into audio you can play from your phone."""
+"""Vocare: turn Royal Road chapters into audio you can play from your phone."""
 from __future__ import annotations
 
 import asyncio
@@ -22,7 +22,7 @@ from pydantic import BaseModel
 from . import royalroad as rr
 from . import tts
 
-log = logging.getLogger("rr-audio")
+log = logging.getLogger("vocare")
 logging.basicConfig(level=logging.INFO)
 
 DATA_DIR = Path(os.environ.get("DATA_DIR", "data")).resolve()
@@ -30,8 +30,8 @@ APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 MAX_JOBS = int(os.environ.get("MAX_CONCURRENT_JOBS", "2"))
 FICTION_TTL = 15 * 60          # re-scrape the chapter list at most every 15 minutes
 PART_WAIT_SECONDS = 150        # how long an audio request waits for its part to render
-AUTH_COOKIE = "rr_auth"
-AUTH_TOKEN = hmac.new(APP_PASSWORD.encode(), b"rr-audio-v1", hashlib.sha256).hexdigest() if APP_PASSWORD else ""
+AUTH_COOKIE = "vocare_auth"
+AUTH_TOKEN = hmac.new(APP_PASSWORD.encode(), b"vocare-v1", hashlib.sha256).hexdigest() if APP_PASSWORD else ""
 STATIC_DIR = Path(__file__).parent / "static"
 
 state: dict = {}
@@ -52,7 +52,7 @@ async def lifespan(app: FastAPI):
     await client.aclose()
 
 
-app = FastAPI(title="RR Audio", lifespan=lifespan)
+app = FastAPI(title="Vocare", lifespan=lifespan)
 
 
 # ---------------------------------------------------------------- auth
