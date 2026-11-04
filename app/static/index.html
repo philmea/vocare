@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RR Audio</title>
+  <meta name="theme-color" content="#14161a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="backBtn" class="icon-btn" aria-label="Back" hidden>
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg>
+    </button>
+    <h1 id="viewTitle">Library</h1>
+    <button id="settingsBtn" class="icon-btn" aria-label="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section id="libraryView">
+      <form id="addForm" class="add-form">
+        <input id="addUrl" type="text" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="Paste a Royal Road fiction link" required>
+        <button type="submit" class="btn primary">Add</button>
+      </form>
+      <p id="addMsg" class="msg" hidden></p>
+      <ul id="libraryList" class="library"></ul>
+      <p id="libraryEmpty" class="empty">No stories yet. Paste a link to a Royal Road fiction above.</p>
+    </section>
+
+    <section id="fictionView" hidden>
+      <div class="fic-head">
+        <img id="ficCover" alt="">
+        <div>
+          <h2 id="ficTitle"></h2>
+          <p id="ficAuthor" class="muted"></p>
+          <div class="fic-actions">
+            <button id="continueBtn" class="btn primary"></button>
+            <button id="refreshBtn" class="btn">Refresh</button>
+            <button id="removeBtn" class="btn danger">Remove</button>
+          </div>
+        </div>
+      </div>
+      <p id="ficMsg" class="msg" hidden></p>
+      <ol id="chapterList" class="chapters"></ol>
+    </section>
+  </main>
+
+  <footer id="player" class="player" hidden>
+    <div class="player-info">
+      <div class="np-title" id="npTitle"></div>
+      <div class="np-sub" id="npSub"></div>
+    </div>
+    <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
+    <div class="times"><span id="tCur">0:00</span><span id="tPart"></span><span id="tDur">0:00</span></div>
+    <div class="controls">
+      <button id="prevBtn" class="icon-btn" aria-label="Previous chapter"><svg viewBox="0 0 24 24"><path d="M6 5v14M19 5l-10 7 10 7z"/></svg></button>
+      <button id="backSkip" class="icon-btn skip" aria-label="Back 15 seconds">-15</button>
+      <button id="playBtn" class="play" aria-label="Play">
+        <svg id="playIcon" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" hidden><path d="M7 4v16M17 4v16"/></svg>
+      </button>
+      <button id="fwdSkip" class="icon-btn skip" aria-label="Forward 30 seconds">+30</button>
+      <button id="nextBtn" class="icon-btn" aria-label="Next chapter"><svg viewBox="0 0 24 24"><path d="M18 5v14M5 5l10 7-10 7z"/></svg></button>
+    </div>
+    <div class="player-extra">
+      <button id="speedBtn" class="chip">1.0×</button>
+      <button id="sleepBtn" class="chip">Sleep: off</button>
+    </div>
+  </footer>
+
+  <dialog id="settingsDlg">
+    <form method="dialog" class="settings">
+      <h2>Voice settings</h2>
+      <label>Text-to-speech service
+        <select id="providerSel"></select>
+      </label>
+      <label>Voice
+        <select id="voiceSel"></select>
+      </label>
+      <button type="button" id="previewBtn" class="btn">Preview voice</button>
+      <p class="muted small">Changing the voice applies to chapters you start next. Audio is generated once per chapter and voice, then cached on the server.</p>
+      <div class="dlg-actions"><button class="btn primary" value="ok">Done</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="loginDlg">
+    <form id="loginForm" class="settings">
+      <h2>Password</h2>
+      <input id="loginPw" type="password" autocomplete="current-password" required>
+      <p id="loginMsg" class="msg" hidden></p>
+      <div class="dlg-actions"><button class="btn primary">Unlock</button></div>
+    </form>
+  </dialog>
+
+  <audio id="audio" preload="auto"></audio>
+  <audio id="previewAudio"></audio>
+  <script src="app.js"></script>
+</body>
+</html>
